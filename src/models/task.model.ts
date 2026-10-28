@@ -8,8 +8,7 @@ export interface ITask extends Document {
   description?: string;
   status: TaskStatus;
   priority: TaskPriority;
-  dueDate?: Date;
-  tags: string[];
+  estimatedTime: number; // in minutes (e.g., 60 = 1 hour, 120 = 2 hours)
   createdAt: Date;
   updatedAt: Date;
 }
@@ -43,12 +42,10 @@ const taskSchema = new Schema<ITask>(
       },
       default: 'medium',
     },
-    dueDate: {
-      type: Date,
-    },
-    tags: {
-      type: [String],
-      default: [],
+    estimatedTime: {
+      type: Number,
+      default: 0,
+      min: [0, 'Estimated time cannot be negative'],
     },
   },
   {

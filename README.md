@@ -104,6 +104,6 @@ Content-Type: application/json
   "description": "Implement JWT and refresh tokens",
   "priority": "high",
   "status": "in-progress",
-  "tags": ["auth", "backend"]
+  "estimatedTime": 90
 }
 ```
