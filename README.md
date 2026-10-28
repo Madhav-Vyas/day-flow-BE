@@ -88,7 +88,7 @@ MONGODB_URI=mongodb://localhost:27017/day-flow
 | :--- | :--- | :--- |
 | `GET` | `/` | API status and overview |
 | `GET` | `/api/v1/health` | Service health status and MongoDB connection state |
-| `GET` | `/api/v1/tasks` | Get all tasks (supports query filters: `status`, `priority`, `search`, `page`, `limit`) |
+| `GET` | `/api/v1/tasks` | Get all tasks (supports query filters: `category`, `status`, `priority`, `dayIndex`, `search`, `page`, `limit`) |
 | `POST` | `/api/v1/tasks` | Create a new task |
 | `GET` | `/api/v1/tasks/:id` | Get task by ID |
 | `PATCH` | `/api/v1/tasks/:id` | Update task by ID |
@@ -100,10 +100,14 @@ POST /api/v1/tasks
 Content-Type: application/json
 
 {
-  "title": "Build user authentication",
-  "description": "Implement JWT and refresh tokens",
-  "priority": "high",
-  "status": "in-progress",
-  "estimatedTime": 90
+  "category": "Feature",
+  "title": "Auth token refresh & silent renewal pipeline",
+  "code": "FE-170",
+  "description": "Implement Axios silent refresh interceptor with exponential backoff",
+  "priority": "HIGH",
+  "status": "TODO",
+  "dayIndex": 2,
+  "estimatedHours": 2.33,
+  "actualHours": 0
 }
 ```

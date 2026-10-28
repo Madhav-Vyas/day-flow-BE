@@ -1,16 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 import { TaskService } from '../services/task.service';
 import { sendResponse } from '../utils/apiResponse';
-import { TaskStatus, TaskPriority } from '../models/task.model';
+import { TaskCategory, TaskPriority, TaskStatus } from '../models/task.model';
 
 export class TaskController {
   static async getAllTasks(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { status, priority, search, page, limit } = req.query;
+      const { category, priority, status, dayIndex, search, page, limit } = req.query;
 
       const result = await TaskService.getAll({
-        status: status as TaskStatus | undefined,
+        category: category as TaskCategory | undefined,
         priority: priority as TaskPriority | undefined,
+        status: status as TaskStatus | undefined,
+        dayIndex: dayIndex !== undefined ? parseInt(dayIndex as string, 10) : undefined,
         search: search as string | undefined,
         page: page ? parseInt(page as string, 10) : undefined,
         limit: limit ? parseInt(limit as string, 10) : undefined,

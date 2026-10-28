@@ -1,9 +1,17 @@
-import { TaskModel, ITask, TaskStatus, TaskPriority } from '../models/task.model';
+import {
+  TaskModel,
+  ITask,
+  TaskCategory,
+  TaskPriority,
+  TaskStatus,
+} from '../models/task.model';
 import { ApiError } from '../utils/apiError';
 
 export interface TaskFilterOptions {
-  status?: TaskStatus;
+  category?: TaskCategory;
   priority?: TaskPriority;
+  status?: TaskStatus;
+  dayIndex?: number;
   search?: string;
   page?: number;
   limit?: number;
@@ -11,14 +19,17 @@ export interface TaskFilterOptions {
 
 export class TaskService {
   static async getAll(options: TaskFilterOptions = {}) {
-    const { status, priority, search, page = 1, limit = 10 } = options;
+    const { category, priority, status, dayIndex, search, page = 1, limit = 50 } = options;
     const query: Record<string, any> = {};
 
-    if (status) query.status = status;
+    if (category) query.category = category;
     if (priority) query.priority = priority;
+    if (status) query.status = status;
+    if (typeof dayIndex === 'number' && !isNaN(dayIndex)) query.dayIndex = dayIndex;
     if (search) {
       query.$or = [
         { title: { $regex: search, $options: 'i' } },
+        { code: { $regex: search, $options: 'i' } },
         { description: { $regex: search, $options: 'i' } },
       ];
     }
@@ -26,7 +37,7 @@ export class TaskService {
     const skip = (page - 1) * limit;
 
     const [tasks, total] = await Promise.all([
-      TaskModel.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit),
+      TaskModel.find(query).sort({ dayIndex: 1, createdAt: -1 }).skip(skip).limit(limit),
       TaskModel.countDocuments(query),
     ]);
 
