@@ -19,6 +19,7 @@ export interface ITask extends Document {
   priority: TaskPriority;
   status: TaskStatus;
   dayIndex: number; // -1 = Backlog, 0 = Mon, 1 = Tue, 2 = Wed, 3 = Thu, 4 = Fri
+  plannedDate?: string | null; // e.g. "2026-10-28" or null for unscheduled backlog
   estimatedHours: number; // decimal hours (e.g. 2.33, 1.5)
   actualHours: number; // decimal hours (e.g. 0, 1.25)
   createdAt: Date;
@@ -82,6 +83,11 @@ const taskSchema = new Schema<ITask>(
       max: [4, 'dayIndex must be between -1 and 4'],
       default: -1,
     },
+    plannedDate: {
+      type: String,
+      trim: true,
+      default: null,
+    },
     estimatedHours: {
       type: Number,
       required: [true, 'estimatedHours is required'],
@@ -102,6 +108,7 @@ const taskSchema = new Schema<ITask>(
 
 // Query indexes
 taskSchema.index({ dayIndex: 1 });
+taskSchema.index({ plannedDate: 1 });
 taskSchema.index({ status: 1 });
 taskSchema.index({ category: 1 });
 taskSchema.index({ priority: 1 });
